@@ -1,21 +1,29 @@
+import bcrypt from "bcrypt";
 
+import UserModel from '../models/usersModel.js';
 
 export const register = async (req, res) => {
     try {
 
-        console.log(req.body);
-    //     // const password = req.body.password;
-    //     // const salt = await bcrypt.genSalt(10); // algr encryption pass
-    //     // const hash = await bcrypt.hash(password, salt); //our hass of pass
+        const password = req.body.password;
+        if (password !== req.body.confirmPassword) {
+            return res.status(401).json({
+                message: 'password !== confirmPassword',
+            });
+        }
+        const salt = await bcrypt.genSalt(10); 
+        const hash = await bcrypt.hash(password, salt); 
 
-    //     // const doc = new UserModel({
-    //     //     email: req.body.email,
-    //     //     fullName: req.body.fullName,
-    //     //     avatarUrl: req.body.avatarUrl,
-    //     //     passwordHash: hash,
-    //     // })
+        const doc = new UserModel({
+            email: req.body.email,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            passwordHash: hash,
+            role: req.body.role,
+        })
+   
 
-    //     // const user = await doc.save();
+         const user = await doc.save();
 
     //     // const token = jwt.sign({ // after register create token
     //     //     _id: user._id,
@@ -29,7 +37,8 @@ export const register = async (req, res) => {
     //     // const { passwordHash, ...userData } = user._doc;
 
         res.json({
-            message: "Good"
+            message: "Done",
+            user
             // ...userData,
             // token,
         });
