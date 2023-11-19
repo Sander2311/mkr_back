@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 import UserModel from '../models/usersModel.js';
 
@@ -25,22 +26,20 @@ export const register = async (req, res) => {
 
          const user = await doc.save();
 
-    //     // const token = jwt.sign({ // after register create token
-    //     //     _id: user._id,
-    //     // },
-    //     //     'keyToken123', // key of token
-    //     //     {
-    //     //         expiresIn: '30d', //life time of the token 
-    //     //     }
-    //     // );
+        const token = jwt.sign({ // after register create token
+            _id: user._id,
+        },
+            'keyToken123', // key of token
+            {
+                expiresIn: '30d', //life time of the token 
+            }
+        );
 
-    //     // const { passwordHash, ...userData } = user._doc;
+        const { passwordHash, ...userData } = user._doc;
 
         res.json({
-            message: "Done",
-            user
-            // ...userData,
-            // token,
+            ...userData,
+            token,
         });
     } catch (err) {
         console.log(err);
@@ -49,3 +48,45 @@ export const register = async (req, res) => {
         });
     };
 }
+
+export const login = async (req, res) => {
+    try {
+        const user = await UserModel.findOne({ email: req.body.email }); //find by email
+
+        if (!user) {
+            return res.status(401).json({
+                message: 'User is not exist',
+            });
+        }
+
+        const isValidPass = await bcrypt.compare(req.body.password, user._doc.passwordHash);//if pass from req = pass from BD of the user
+
+        if (!isValidPass) { // pass != pass in BD
+            return res.status(401).json({
+                message: 'Email or Password is no valid',
+            });
+        }
+
+        const token = jwt.sign({ // after login create token
+            _id: user._id,
+        },
+            'keyToken123', // key of token
+            {
+                expiresIn: '30d', //life time of the token 
+            }
+        );
+
+        const { passwordHash, ...userData } = user._doc;
+
+        res.json({
+            ...userData,
+            token,
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: 'Cannot login',
+        });
+    }
+};

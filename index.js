@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import * as authController from './controllers/authController.js';
+import * as usersController from './controllers/usersController.js';
+import * as coursesController from './controllers/coursesController.js';
+import checkAuth from './utils/checkAuth.js';
 
 mongoose
     .connect('mongodb+srv://admim:sander@cluster0.2urd1z3.mongodb.net/mkr?retryWrites=true&w=majority')
@@ -13,7 +16,12 @@ const app = express();
 app.use(express.json()); // read json from req
 app.use(cors()); // manage cors error
 
-app.post('/auth/register',  authController.register);
+app.post('/auth/register', authController.register);
+app.post('/auth/login', authController.login);
+app.get('/users/me', checkAuth, usersController.getMe);
+app.get('/users/teachers', usersController.getAllTeachers);
+
+app.post('/courses/', coursesController.createCourse);
 
 app.listen(3333, (err) => {
     if(err){
