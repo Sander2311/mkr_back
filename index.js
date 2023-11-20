@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import * as authController from './controllers/authController.js';
 import * as usersController from './controllers/usersController.js';
 import * as coursesController from './controllers/coursesController.js';
+import * as groupsController from './controllers/groupsController.js';
 import checkAuth from './utils/checkAuth.js';
 
 mongoose
@@ -22,6 +23,12 @@ app.get('/users/me', checkAuth, usersController.getMe);
 app.get('/users/teachers', usersController.getAllTeachers);
 
 app.post('/courses/', coursesController.createCourse);
+app.get('/courses/', coursesController.getAllCourses);
+app.get('/courses/:id', coursesController.getCoursesByTeacherId);
+app.get('/courses/:group', coursesController.getCoursesByGroup);
+
+app.post('/groups/', groupsController.createGroupe);
+app.get('/groups/', groupsController.getAllGroups);
 
 app.listen(3333, (err) => {
     if(err){
