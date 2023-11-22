@@ -27,6 +27,11 @@ const UserSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "Group",
     },
+    avatarUrl: {
+      type: String,
+      default:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRZhrZm_bEQIfEztj_4w2fv4JPIaAGeD6a0gOk2m1bIsIYNA0EWrXEeDbVngVRYwV_Jn4&usqp=CAU",
+    },
   },
   {
     timestamps: true, //date of cteate or update

@@ -42,6 +42,33 @@ export const getAllCourses = async (req, res) => {
   }
 };
 
+export const getCourseById = async (req, res) => {
+  try {
+    const courseId = req.params.id;
+
+    const course = await coursesModel
+      .findById(courseId)
+      .populate([
+        {
+          path: "teachers",
+          model: "User",
+        },
+        {
+          path: "groups",
+          model: "Group",
+        },
+      ])
+      .exec();
+
+    res.json(course);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Fail creating",
+    });
+  }
+};
+
 export const getCoursesByTeacherId = async (req, res) => {
   try {
     const teacherId = req.params.id;
@@ -73,11 +100,11 @@ export const getCoursesByTeacherId = async (req, res) => {
 
 export const getCoursesByGroup = async (req, res) => {
   try {
-    const group = req.params.group;
+    const groupId = req.params.groupId;
 
     const courses = await coursesModel
       .find({
-        groups: { $in: [group] },
+        groups: { $in: [groupId] },
       })
       .populate([
         {

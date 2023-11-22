@@ -27,10 +27,11 @@ app.patch("/users/:id", usersController.updateStudentGroup);
 app.get("/users/teachers", usersController.getAllTeachers);
 app.get("/users/students", usersController.getAllStudents);
 
+app.get("/course/:id", coursesController.getCourseById);
 app.post("/courses/", coursesController.createCourse);
 app.get("/courses/", coursesController.getAllCourses);
 app.get("/courses/:id", coursesController.getCoursesByTeacherId);
-app.get("/courses/:group", coursesController.getCoursesByGroup);
+app.get("/courses/group/:groupId", coursesController.getCoursesByGroup);
 
 app.post("/groups/", groupsController.createGroupe);
 app.get("/groups/", groupsController.getAllGroups);
