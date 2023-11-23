@@ -5,6 +5,7 @@ import * as authController from "./controllers/authController.js";
 import * as usersController from "./controllers/usersController.js";
 import * as coursesController from "./controllers/coursesController.js";
 import * as groupsController from "./controllers/groupsController.js";
+import * as materialsController from "./controllers/materialsController.js";
 import checkAuth from "./utils/checkAuth.js";
 
 mongoose
@@ -35,6 +36,11 @@ app.get("/courses/group/:groupId", coursesController.getCoursesByGroup);
 
 app.post("/groups/", groupsController.createGroupe);
 app.get("/groups/", groupsController.getAllGroups);
+
+app.post("/materials/", materialsController.createMaterial);
+app.get("/materials/:id", materialsController.getAllMaterialsByCourseId);
+app.patch("/materials/:id", materialsController.updateMaterial);
+app.delete("/materials/:id", materialsController.deleteMaterial);
 
 app.listen(3333, (err) => {
   if (err) {
