@@ -43,7 +43,7 @@ export const getAllTeachers = async (req, res) => {
 
 export const getAllStudents = async (req, res) => {
   try {
-    const teachers = await usersModel
+    const students = await usersModel
       .find({
         role: "student",
       })
@@ -54,7 +54,54 @@ export const getAllStudents = async (req, res) => {
       .select("-passwordHash")
       .exec();
 
-    res.json(teachers);
+    res.json(students);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "You do not have access",
+    });
+  }
+};
+
+export const getStudentsByGroupId = async (req, res) => {
+  try {
+    const groupId = req.params.id;
+
+    const students = await usersModel
+      .find({
+        role: "student",
+        group: groupId,
+      })
+      .populate({
+        path: "group", // Назва поля, яке має бути заповнене
+        model: "Group", // Назва моделі, на яку посилається айдішники
+      })
+      .select("-passwordHash")
+      .exec();
+
+    res.json(students);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "You do not have access",
+    });
+  }
+};
+
+export const getUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await usersModel
+      .findById(userId)
+      .populate({
+        path: "group", // Назва поля, яке має бути заповнене
+        model: "Group", // Назва моделі, на яку посилається айдішники
+      })
+      .select("-passwordHash")
+      .exec();
+
+    res.json(user);
   } catch (err) {
     console.log(err);
     res.status(500).json({

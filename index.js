@@ -6,6 +6,8 @@ import * as usersController from "./controllers/usersController.js";
 import * as coursesController from "./controllers/coursesController.js";
 import * as groupsController from "./controllers/groupsController.js";
 import * as materialsController from "./controllers/materialsController.js";
+import * as messagesController from "./controllers/messagesController.js";
+import * as criteriasController from "./controllers/criteriasController.js";
 import checkAuth from "./utils/checkAuth.js";
 
 mongoose
@@ -24,9 +26,11 @@ app.post("/auth/register", authController.register);
 app.post("/auth/login", authController.login);
 
 app.get("/users/me", checkAuth, usersController.getMe);
-app.patch("/users/:id", usersController.updateStudentGroup);
 app.get("/users/teachers", usersController.getAllTeachers);
 app.get("/users/students", usersController.getAllStudents);
+app.patch("/users/:id", usersController.updateStudentGroup);
+app.get("/users/:id", usersController.getUserById);
+app.get("/users/group/:id", usersController.getStudentsByGroupId);
 
 app.get("/course/:id", coursesController.getCourseById);
 app.post("/courses/", coursesController.createCourse);
@@ -41,6 +45,12 @@ app.post("/materials/", materialsController.createMaterial);
 app.get("/materials/:id", materialsController.getAllMaterialsByCourseId);
 app.patch("/materials/:id", materialsController.updateMaterial);
 app.delete("/materials/:id", materialsController.deleteMaterial);
+
+app.post("/messages/", messagesController.createMesage);
+app.get("/messages/:id", messagesController.getAllMessagesByCourseId);
+
+app.post("/criterias/", criteriasController.createCriterias);
+app.get("/criterias/:id", criteriasController.getAllCriteriasByCourseId);
 
 app.listen(3333, (err) => {
   if (err) {
