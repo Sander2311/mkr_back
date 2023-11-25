@@ -21,7 +21,7 @@ export const getAllMaterialsByCourseId = async (req, res) => {
   try {
     const materials = await materialsModel
       .find({ course: req.params.id })
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: 1 });
 
     res.json(materials);
   } catch (err) {

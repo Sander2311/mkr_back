@@ -8,6 +8,7 @@ import * as groupsController from "./controllers/groupsController.js";
 import * as materialsController from "./controllers/materialsController.js";
 import * as messagesController from "./controllers/messagesController.js";
 import * as criteriasController from "./controllers/criteriasController.js";
+import * as marksController from "./controllers/marksController.js";
 import checkAuth from "./utils/checkAuth.js";
 
 mongoose
@@ -51,6 +52,9 @@ app.get("/messages/:id", messagesController.getAllMessagesByCourseId);
 
 app.post("/criterias/", criteriasController.createCriterias);
 app.get("/criterias/:id", criteriasController.getAllCriteriasByCourseId);
+
+app.get("/marks/:id", marksController.getAllMarksByCourseId);
+app.patch("/marks/:id", marksController.updateMarkById);
 
 app.listen(3333, (err) => {
   if (err) {
